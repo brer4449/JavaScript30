@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.getElementById("draw");
+      const ctx = canvas.getContext("2d");
+      // don't draw on canvas element itself in HTML, draw on the context (ctx)
+      // context can be 2D or 3D
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.strokeStyle = "#BADA55";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.lineWidth = 100;
+      ctx.globalCompositeOperator = "multiply"; // like blend mode in PS CAN PLAY WITH THE DIFFERENT TYPES! JOOJLE IT!
+
+      let isDrawing = false; // a flag by default set to false, when mouse clicked down set to true, let go reset to false
+      let lastX = 0;
+      let lastY = 0;
+      /* https://mothereffinghsl.com/ */
+      let hue = 0;
+      let direction = true;
+
+      function draw(e) {
+        if (!isDrawing) return; // stop the function from running when they are not moused down
+        console.log(e);
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`; // hsl(hue, saturation, lightness)
+        ctx.beginPath(); // starting line
+        // start from
+        ctx.moveTo(lastX, lastY); // start with an x & y, move to x & y | starting line
+        // go to
+        ctx.lineTo(e.offsetX, e.offsetY); // start with an x & y, move to x & y | starting line
+        ctx.stroke();
+        // lastX = e.offsetX;
+        // lastY = e.offsetY;
+        // ES6 destructuring
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        hue++;
+        if (hue > 360) {
+          hue = 0;
+        }
+        if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+          // flip the direction
+          direction = !direction;
+        }
+        if (direction) {
+          ctx.lineWidth++;
+        } else {
+          ctx.lineWidth--;
+        }
+      }
+
+      canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", () => (isDrawing = false));
+      canvas.addEventListener("mouseout", () => (isDrawing = false)); // if you mousedown and leave window and come back, mouseup never triggered so mousedown is still happening, thus mouseout to stop drawing
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>
