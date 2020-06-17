@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+  </head>
+  <body>
+    <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+    <script>
+      const dogs = [
+        { name: "Snickers", age: 2 },
+        { name: "hugo", age: 8 },
+      ];
+
+      function makeGreen() {
+        const p = document.querySelector("p");
+        p.style.color = "#BADA55";
+        p.style.fontSize = "50px";
+      }
+      // IF you want to find where JS is firing, right click on element and go to BREAK ON, then toggle ATTRIBUTE MODIFICATIONS, this will open a debugger tool when function is fired and show exactly where it is firing
+      // Under BREAK ON also have SUBTREE MODIFICATIONS (change a child's text or attributes) and NODE REMOVAL (remove child)
+
+      // Regular
+      console.log("hello");
+
+      // Interpolated
+      console.log("Hello I am a %s string!", "poop"); // This isn't used so much since we have back ticks
+
+      // Styled
+      // console.log(
+      //   "%c I am some great text",
+      //   "font-size: 50px; background: red; text-shadow: 10px 10px 0 blue"
+      // ); // Can apply any font CSS to it
+
+      // warning!
+      console.warn("OOOH NO!"); // Displays as a warning, gives stack trace to where it is in code
+
+      // Error :|
+      console.error("Shit!"); // Displays as an error, gives stack trace to where it is in code
+
+      // Info
+      console.info("Crocodiles eat 3-4 per year"); // Displays as info with little i icon
+
+      // Testing
+      console.assert(1 === 1, "That is wrong!"); // Will only fire if something is wrong (this doesn't fire)
+      console.assert(1 === 2, "That is wrong!"); // This will run since it's wrong
+      const p = document.querySelector("p");
+      console.assert(p.classList.contains("ouch"), "That is wrong!"); // Can check if something has a class of what you expect it to
+
+      // clearing
+      // console.clear();
+
+      // Viewing DOM Elements
+      console.log(p); // DOM element itself
+      console.dir(p); // all the different property and methods of that DOM element
+
+      console.clear();
+      // Grouping together
+      dogs.forEach((dog) => {
+        // console.group(`${dog.name}`);
+        console.groupCollapsed(`${dog.name}`); // By default starts collapsed
+        console.log(`this is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+        console.groupEnd(`${dog.name}`);
+        // Must use SAME STRING that you defined group with to end the group
+      });
+      // counting
+      console.count("Wes"); // Counts how many times you use a specific word or number or DOM node, etc.
+      console.count("Wes");
+      console.count("Steve");
+      console.count("Steve");
+      console.count("Steve");
+
+      console.count("Wes");
+      console.count("Wes");
+      console.count("Steve");
+      console.count("Wes");
+
+      // timing
+      // See how long something takes
+      // Just like with group need to pass SAME STRING at start and at end
+      // Also performance.now() in the browser
+      console.time("fetching data");
+      fetch("https://api.github.com/users/wesbos")
+        .then((data) => data.json())
+        .then((data) => {
+          console.timeEnd("fetching data");
+          console.log(data);
+        });
+    </script>
+  </body>
+</html>
