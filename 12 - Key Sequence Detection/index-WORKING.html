@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script
+      type="text/javascript"
+      src="https://www.cornify.com/js/cornify.js"
+    ></script>
+  </head>
+  <body>
+    <script>
+      /* Key Sequencing Detection: 
+      when someone inputs a certain sequence of keys into window, input, etc. then something needs to happen
+      Konami code! ie. up up down down left right b a in tony hawk or mario, etc.
+      */
+      const pressed = [];
+      const secretCode = "wesbos";
+      window.addEventListener("keyup", (e) => {
+        console.log(e.key);
+        pressed.push(e.key);
+        // want to start from end of the array, use negative the length we are checking against, from there trim the array (second half of splice)
+        // only shows 6 letters at a time, pushes out excess. ie. type "wesbos" and then "is cool", it will push out wesbos and only show is cool
+        pressed.splice(
+          -secretCode.length - 1,
+          pressed.length - secretCode.length
+        );
+        // turn it back into a string
+        if (pressed.join("").includes(secretCode)) {
+          console.log("DING DING! YOU DID IT!");
+          // cheesy method that adds random unicorns/rainbows
+          cornify_add();
+        }
+        console.log(pressed);
+      });
+    </script>
+  </body>
+</html>
