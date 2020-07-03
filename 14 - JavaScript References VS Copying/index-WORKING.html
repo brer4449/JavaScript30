@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      // // start with strings, numbers and booleans
+      // let age = 100;
+      // let age2 = age;
+      // console.log(age, age2); // gives what expected: 100, 100
+      // age = 200;
+      // console.log(age, age2); // gives 200, 100, since the value of age goes into the variable at the same time
+
+      // // same works for strings:
+      // let name = "Wes";
+      // let name2 = name;
+      // console.log(name, name2);
+      // name = "wesley";
+      // console.log(name, name2);
+      // // the VALUE of strings, numbers, booleans go into variable, and if you change the original one, it's ok, NOT going to update the other one.
+
+      // // Let's say we have an array
+      // const players = ["Wes", "Sarah", "Ryan", "Poppy"];
+
+      // // and we want to make a copy of it.
+      // const team = players;
+
+      // // console.log(players, team);
+
+      // // You might think we can just do something like this:
+      // team[3] = "lux";
+      // // console logging team AND players gives lux as the fourth element...
+      // // since we updated team (which is a reference to the original array) the edit is always going to go back to the reference of where it was
+      // // which is NOT the same as the first example
+      // // If you update an array, it will ALWAYS REFERENCE BACK
+
+      // // however what happens when we update that array?
+
+      // // now here is the problem!
+
+      // // oh no - we have edited the original array too!
+
+      // // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+      // // So, how do we fix this? We take a copy instead!
+      // // when nothing is passed into slice, it makes a copy of the array!
+      // const team2 = players.slice();
+      // // if we change the last element to lux again, the original array (players) stays the same, and team2 is the only one that changes, SINCE TEAM2 IS A COPY
+
+      // // one way
+
+      // // or create a new array and concat the old one in
+      // const team3 = [].concat(players);
+
+      // // or use the new ES6 Spread
+      // const team4 = [...players];
+
+      // // and last way we can copy is using Array.from:
+      // const team5 = Array.from(players);
+
+      // // now when we update it, the original one isn't changed
+
+      // The same thing goes for objects, let's say we have a person object
+
+      // with Objects
+      const person = {
+        name: "Wes Bos",
+        age: 80,
+      };
+
+      // // and think we make a copy:
+      // const captain = person;
+      // captain.number = 99;
+      // // we just made a reference instead of a copy...
+
+      // how do we take a copy instead?
+      // start with a blank object, pass in the object you wish to copy all the properties from, then "fold in" the new properties you wish to overwrite
+      const cap2 = Object.assign({}, person, { number: 99, age: 12 });
+
+      // // We will hopefully soon see the object ...spread
+      // const cap3 = { ...person };
+
+      // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      const wes = {
+        name: "wes",
+        age: 100,
+        social: {
+          twitter: "@wesbos",
+          facebook: "wesbos.developer",
+        },
+      };
+      console.clear();
+      console.log(wes);
+
+      const dev = Object.assign({}, wes);
+      // reassigning the name of dev DOES NOT update the original object since it's a REFERENCE
+      // if we were to update something in social, it WILL affect the original, since Object.assign only works one level deep...
+
+      // poor man's deep clone (wes does not recommend)
+      // JSON.stringify turns the object into a STRING, and then JSON.parse turns it back into an object (not sure about performance)
+      const dev2 = JSON.parse(JSON.stringify(wes));
+    </script>
+  </body>
+</html>
