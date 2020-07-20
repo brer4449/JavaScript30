@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two">
+        <div class="three"></div>
+      </div>
+    </div>
+
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      div {
+        width: 100%;
+        padding: 100px;
+      }
+
+      .one {
+        background: thistle;
+      }
+
+      .two {
+        background: mistyrose;
+      }
+
+      .three {
+        background: coral;
+      }
+    </style>
+
+    <button>Click me!</button>
+    <script>
+      const divs = document.querySelectorAll("div");
+
+      // when you click on something the capture (of the click) goes from the top down, but the event trigger bubbles up, hence why it console logs three, then two, then one, then bod, it works its way up
+      function logText(e) {
+        // when you click on a nested element, there's a ripple effect all the way to the top of the document and trigger clicks on those elements as well
+        console.log(this.classList.value); // console logs three two one
+        // console.log(this); // console logs the divs with class three, then two, then one
+        // stopPropagation() says "stop bubbling this event up, I clicked the one that I meant to click"
+        // doesn't trigger events on the parents on the way up
+        // can wrap stopPropagation in if statement if we want the middle element
+        // e.stopPropagation(); // stop bubbling!
+      }
+
+      // document.body.addEventListener("click", logText);
+
+      // on addEventListener, have third param which is options, when capture is set to true, the event triggers on the capture down, not on the bubble up, by default capture is false
+      // so instead of three two one, it will console log one two three (working its way inward)
+      divs.forEach((div) =>
+        div.addEventListener("click", logText, {
+          capture: false,
+          // it listens for a click, and then it unbinds itself (which is the same thing as saying div.removeEventListener("click", logText))
+          // literally fires once, and just one time until page is refreshed
+          once: true,
+        })
+      );
+
+      // USED IN STORE CHECKOUTS!!
+      // each subsequent click won't fire off the event!
+      const button = document.querySelector("button");
+      button.addEventListener(
+        "click",
+        () => {
+          console.log("Click!!!");
+        },
+        {
+          once: true,
+        }
+      );
+    </script>
+  </body>
+</html>
